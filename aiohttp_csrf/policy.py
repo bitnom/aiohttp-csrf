@@ -19,6 +19,8 @@ class FormPolicy(AbstractPolicy):
         post = post_req.get(self.field_name) if post_req is not None else None
         post = post if post is not None else ''
         token = get if get is not None else post
+        if not original_value:
+            return False
 
         return compare_digest(token, original_value)
 
@@ -30,6 +32,8 @@ class HeaderPolicy(AbstractPolicy):
 
     async def check(self, request, original_value):
         token = request.headers.get(self.header_name)
+        if not original_value:
+            return False
 
         return compare_digest(token, original_value)
 
